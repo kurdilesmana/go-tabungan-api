@@ -22,9 +22,11 @@ func InitServer(api api.TabunganAPI, log *logging.Logger) *Server {
 
 func (s *Server) Start(port string) {
 	app := fiber.New()
-
-	tabunganRoutes := app.Group("/tabungan")
-	tabunganRoutes.Post("/daftar", s.api.Register)
+	app.Post("/daftar", s.api.Register)
+	app.Post("/tabung", s.api.Saving)
+	app.Post("/tarik", s.api.CashWithdrawl)
+	app.Get("/saldo/:no_rekening", s.api.Balance)
+	app.Get("/mutasi/:no_rekening", s.api.Mutation)
 
 	err := app.Listen(port)
 	if err != nil {
